@@ -10,8 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COR.H
-# define COR.H
+#ifndef COR_H
+# define COR_H
+
+#include <op.h>
+#include <op.c>
 
 typedef struct			s_proc {
 	unsigned int		pid;
@@ -43,5 +46,28 @@ typedef struct			s_prog {
 	int					checks_nbr;
 	short				last_live_nbr;
 }						t_prog;
+
+typedef struct			s_check 
+{
+	unsigned int 		arg1;
+	unsigned int 		arg2;
+	unsigned int 		arg3;
+	unsigned char 		codage;
+	unsigned char 		first_arg;
+	unsigned char 		second_arg;
+	unsigned char 		thirt_arg;
+	short 				dir;
+	unsigned char 		reg;
+	int 				ind;
+	unsigned char 		t_reg1;
+	unsigned char 		t_reg2;
+	unsigned char 		t_reg3;
+}						t_check;
+
+
+unsigned int			load(*t_proc proc, *t_prog g, *t_arg_type type, *unsigned char map);
+void					check_codage(t_check *c);
+void 					check_carry(t_check *c)ж
+
 
 #endif
