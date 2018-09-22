@@ -49,19 +49,22 @@ typedef struct			s_prog {
 
 typedef struct			s_check 
 {
-	unsigned int 		arg1;
-	unsigned int 		arg2;
-	unsigned int 		arg3;
+	unsigned int 		check_arg1;
+	unsigned int 		check_arg2;
+	unsigned int 		check_arg3;
 	unsigned char 		codage;
-	unsigned char 		first_arg;
-	unsigned char 		second_arg;
-	unsigned char 		thirt_arg;
+	unsigned char 		pos_first_arg;
+	unsigned char 		pos_second_arg;
+	unsigned char 		pos_thirt_arg;
 	short 				dir;
 	unsigned char 		reg;
 	int 				ind;
 	unsigned char 		t_reg1;
 	unsigned char 		t_reg2;
 	unsigned char 		t_reg3;
+	unsigned int 		arg1;
+	unsigned int 		arg2;
+	unsigned int 		arg3;
 }						t_check;
 
 

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   add.c                                             :+:      :+:    :+:   */
+/*   xor.c.                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,22 +15,12 @@
 #include <cor.h>
 
 /*
-T_REG T_REG T_REG
-результат (первый плюс второй аргумент) записывается в третий.
-в зависимости от того, что записали в третий меняем carry
-если записали 0 меняем carry на  1, если не 0 меняем на 0
-
-Я их переписаваю в чары так чтобы T_IND был равен дефайну в op.h
-А аргументы заходят массивом как *t_arg_type
-Короче чтобы ты могла в коде использовать их
-Типа if args[i] = T_IND
-если в аргументе хранится число:
-- 1 = T_REG;
-- 2 = T_DIR;
-- 4 = T_IND;
+применяем ^ для первых друх аргументов и записываем результат в третий
+меняем carry на 1, если результат операции был 0
+или меняем carry на 0, если результат операции был не ноль
 */
 
-unsigned int add(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int xor(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
 
@@ -39,6 +29,6 @@ unsigned int add(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 	check_first_arg(c);
 	check_second_arg(c);
 	check_third_arg(c);
-	c->reg = c->arg1 + c->arg2;
-	check_carry(c);
+	c->reg = c->arg1 ^ c->arg2;
+	check_carry(c);	
 }

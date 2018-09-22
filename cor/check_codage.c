@@ -23,30 +23,51 @@ void check_carry(t_check *c)
 		g->carry = 0;
 }
 
+/*
+1 = reg - 1 byte
+2 = dir - 2 or 4 bytes
+3 - ind - 2 bytes, read 4 bytes
+
+что делать, если кодаж весит 0 байт?
+
+если валидация кодажа универсальная и идет в отдельной функции, 
+а в команды уже приходят валидные аргументы, согласно кодажу, то может быть такое:
+
+
+Еще один нюанс: 
+при чтении байтов нужно кастить их в 
+зависимости от размера чтения:
+
+1 байт - unsigned char
+2 байта - short
+4 байта - unsigned int
+
+*/
+
 void check_codage(t_check *c)
 {
     if((c->codage & 192) == 64)
-        c->arg1 = 1;
+        c->check_arg1 = 1;
     else if((c->codage & 192) == 192)
-        c->arg1 = 3;
+        c->check_arg1 = 3;
     else if((c->codage & 192) == 128 )
-        c->arg1 = 2;
+        c->check_arg1 = 2;
     else
-        c->arg1 = 0;
+        c->check_arg1 = 0;
     if((c->codage & 48) == 32)
-        c->arg2 = 2;
+        c->check_arg2 = 2;
     else if((c->codage & 48) == 48 )
-        c->arg2 = 3;
+        c->check_arg2 = 3;
     else if((c->codage & 48) == 16)
-        c->arg2 = 1;
+        c->check_arg2 = 1;
     else
-        c->arg2 = 0;
+        c->check_arg2 = 0;
     if((c->codage & 12) == 8)
-        c->arg3 = 2;
+        c->check_arg3 = 2;
     else if((c->codage & 12) == 12)
-        c->arg3 = 3;
+        c->check_arg3 = 3;
     else if((c->codage & 12) == 4)
-        c->arg3 = 1;
+        c->check_arg3 = 1;
     else
-        c->arg3 = 0;
+        c->check_arg3 = 0;
 }
