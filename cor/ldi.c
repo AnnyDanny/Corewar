@@ -36,67 +36,59 @@ T_REG | T_DIR | T_IND    T_REG | T_DIR   T_REG
 6 - считать 4 байта с этой переменной и записать в третий аргумент (в т рег)
 */
 
-void check_first(t_check *c)
-{
-	unsigned int c->pos_first_arg;
+// void check_first(t_check *c)
+// {
+// 	unsigned int c->pos_first_arg;
 
-	c->pos_first_arg = map[g->pos + 2];
-	if (c->check_arg1 == 1)
-	{
-		ft_memcpy((void*)arg1, (const void*)map[pos_first_arg], 1);
-		c->pos_second_arg = c->pos_first_arg + 1;
-	}
-	else if (c->check_arg1 == 2)
-	{
-		ft_memcpy((void*)arg1, (const void*)map[pos_first_arg], 2);
-		c->pos_second_arg = c->pos_first_arg + 2;
-	}
-}
+// 	c->pos_first_arg = map[g->pos + 2];
+// 	if (c->check_arg1 == 1)
+// 	{
+// 		ft_memcpy((void*)arg1, (const void*)map[pos_first_arg], 1);
+// 		c->pos_second_arg = c->pos_first_arg + 1;
+// 	}
+// 	else if (c->check_arg1 == 2)
+// 	{
+// 		ft_memcpy((void*)arg1, (const void*)map[pos_first_arg], 2);
+// 		c->pos_second_arg = c->pos_first_arg + 2;
+// 	}
+// }
 
-void check_second(t_check *c)
-{
-	if (c->check_arg2 == 1)
-	{
-		ft_memcpy((void*)arg2, (const void*)map[pos_second_arg], 1);
-		c->pos_third_arg = c->pos_second_arg + 1;
-	}
-	else if (c->check_arg2 == 2)
-	{
-		ft_memcpy((void*)args, (const void*)map[pos_second_arg], 2);
-		c->pos_third_arg = c->pos_second_arg + 2;
-	}
-}
+// void check_second(t_check *c)
+// {
+// 	if (c->check_arg2 == 1)
+// 	{
+// 		ft_memcpy((void*)arg2, (const void*)map[pos_second_arg], 1);
+// 		c->pos_third_arg = c->pos_second_arg + 1;
+// 	}
+// 	else if (c->check_arg2 == 2)
+// 	{
+// 		ft_memcpy((void*)args, (const void*)map[pos_second_arg], 2);
+// 		c->pos_third_arg = c->pos_second_arg + 2;
+// 	}
+// }
 
-void pos_first_second(t_check *c, unsigned int current_pos)
-{
-	unsigned char pos;
+// void pos_first_second(t_check *c, unsigned int current_pos)
+// {
+// 	unsigned char pos;
 
-	pos = ((c->arg1 + c->arg2) % IDX_MOD) + current_pos;
-	ft_memcpy((void*)c->reg, (const void*)map[pos], 4);
-}
+// 	pos = ((c->arg1 + c->arg2) % IDX_MOD) + current_pos;
+// 	ft_memcpy((void*)c->reg, (const void*)map[pos], 4);
+// }
 
 unsigned int ldi(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	unsigned int current_pos;;
 	t_check *c;
 	unsigned int temp;
-	unsigned int pos_ind;
 
-	current_pos = map[g->pos];
-	c->codage = map[g->pos + 1];
-	check_codage(c);
-	if (c->check_arg1 == 3)
-	{	
-		pos_ind = (T_IND % IDX_MOD) + current_pos;
-		ft_memcpy((void*)arg1, (const void*)map[pos_ind], 4);
-	}
-	check_first(c);
-	check_second(c);
-	if (c->check_arg3 == 1)
+	current_pos = map[proc->pos + 2];
+	get_args(proc, c, type, map);
+	if (type[0] == 4)
 	{
-		ft_memcpy((void*)arg3, (const void*)map[pos_third_arg], 1);
-		pos_first_second(c, current_pos);
+		ft_memcpy((void*)c->ind, (const void*)&map[(c->arg[0] % IDX_MOD) + proc->pos], 4);
+		c->arg[0] = c->ind;
 	}
+	ft_memcpy((void*)prec->reg[c->arg[2]], (const void*)&map[((c->arg[0] + c->arg[1]) % IDX_MOD) + prec->pos], 4);
 }
 
 

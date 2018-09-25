@@ -18,9 +18,9 @@
 void check_carry(t_check *c)
 {
 	if (c->reg == 0)
-		g->carry = 1;
+		proc->carry = 1;
 	else
-		g->carry = 0;
+		proc->carry = 0;
 }
 
 /*

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   live.c                                             :+:      :+:    :+:   */
+/*   aff.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,15 +15,16 @@
 #include <cor.h>
 
 /*
-выполняет 2 операции:
-1. засчитывает, что процесс (который выполняет данную команду) жив.
-2. засчитывает, что жив номер (если этот номер совпадает с номером игрока, то засчитывает, что этот игрок жив)
-который заходит, как аргумент (T_DIR)
+T_REG
+значение из аргумента % 256 выводится на экран как ASCII символ
 */
 
-unsigned int				live(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int get_args(t_proc *proc, t_check *c, t_arg_type *type, unsigned char *map)
 {
-	proc->live = 1;
-	if (type->args[0] == proc->player_nbr)
-		g->last_live_nbr = proc->player_nbr;
+	c->pos = map[proc->pos + 2];
+
+	ft_memcpy((void*)c->arg[0], (const void*)&map[c->pos], 1);
+	if (c->arg[0] >= 0 && c->arg[0] <= 16)
+		c->arg[0] = c->arg[0] % 256;
+	ft_printf("%u", c->arg[0]);
 }

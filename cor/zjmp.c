@@ -22,14 +22,12 @@
 unsigned int				zjmp(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
+	unsigned int pos;
 
-	c->codage = map[g->pos + 1];
-	c->first_arg = map[g->pos + 2];
-	check_codage(c);
-	if (g->carry == 1)
+	pos = map[proc->pos + 2];
+	if (proc->carry == 1)
 	{
-		if (c->arg1 == 2)
-			ft_memcpy((void*)c->dir, (const void*)map[c->first_arg], 2);
-		g->pos = c->dir % IDX_MOD;
+		ft_memcpy((void*)c->dir, (const void*)&map[pos], 2);
+		proc->pos = c->dir % IDX_MOD;
 	}
 }

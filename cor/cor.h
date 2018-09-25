@@ -16,6 +16,17 @@
 #include <op.h>
 #include <op.c>
 
+/*
+#define T_REG					1
+#define T_DIR					2
+#define T_IND					4
+#define T_LAB					8
+
+1 байт - unsigned char
+2 байта - short
+4 байта - unsigned int
+*/
+
 typedef struct			s_proc {
 	unsigned int		pid;
 	unsigned int		pos;
@@ -49,22 +60,15 @@ typedef struct			s_prog {
 
 typedef struct			s_check 
 {
-	unsigned int 		check_arg1;
-	unsigned int 		check_arg2;
-	unsigned int 		check_arg3;
-	unsigned char 		codage;
-	unsigned char 		pos_first_arg;
-	unsigned char 		pos_second_arg;
-	unsigned char 		pos_thirt_arg;
 	short 				dir;
 	unsigned char 		reg;
 	int 				ind;
-	unsigned char 		t_reg1;
-	unsigned char 		t_reg2;
-	unsigned char 		t_reg3;
+	unsigned char 		*arg;
 	unsigned int 		arg1;
 	unsigned int 		arg2;
 	unsigned int 		arg3;
+	unsigned char		pos;
+	int 				count_steps;
 }						t_check;
 
 

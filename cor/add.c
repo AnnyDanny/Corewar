@@ -25,20 +25,13 @@ T_REG T_REG T_REG
 Короче чтобы ты могла в коде использовать их
 Типа if args[i] = T_IND
 если в аргументе хранится число:
-- 1 = T_REG;
-- 2 = T_DIR;
-- 4 = T_IND;
 */
 
 unsigned int add(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
 
-	c->codage = map[g->pos + 1];
-	check_codage(c);
-	check_first_arg(c);
-	check_second_arg(c);
-	check_third_arg(c);
-	c->reg = c->arg1 + c->arg2;
+	if (get_args(proc, c, type, map) == 1)
+		proc->reg[c->arg[2]] = c->arg[0] + c->arg[1];
 	check_carry(c);
 }

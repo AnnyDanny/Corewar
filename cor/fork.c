@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   live.c                                             :+:      :+:    :+:   */
+/*   fork.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -15,15 +15,20 @@
 #include <cor.h>
 
 /*
-выполняет 2 операции:
-1. засчитывает, что процесс (который выполняет данную команду) жив.
-2. засчитывает, что жив номер (если этот номер совпадает с номером игрока, то засчитывает, что этот игрок жив)
-который заходит, как аргумент (T_DIR)
+T_DIR
+
+2
+
+Значение (T_DIR % IDX_MOD) плюс текущая позиция PC является позицией, 
+на которой создается копия текущего процесса со всеми его параметрами (кроме самой позиции)
 */
 
-unsigned int				live(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int				fork(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	proc->live = 1;
-	if (type->args[0] == proc->player_nbr)
-		g->last_live_nbr = proc->player_nbr;
+	t_check *c;
+	unsigned int pos;
+
+	ft_memcpy((void*)c->arg[0], (const void*)&map[proc->pos + 2], 4 - (2 * proc->cmnd));
+	pos = (c->arg[0] % IDX_MOD) + proc->pos;
+	// копию текущего процесса записывать в новый элемент листа?
 }
