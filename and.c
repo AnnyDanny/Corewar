@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fork.c                                             :+:      :+:    :+:   */
+/*   and.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,21 +14,13 @@
 #include <op.c>
 #include <cor.h>
 
-/*
-T_DIR
-
-2
-
-Значение (T_DIR % IDX_MOD) плюс текущая позиция PC является позицией, 
-на которой создается копия текущего процесса со всеми его параметрами (кроме самой позиции)
-*/
-
-unsigned int				fork(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int and(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
-	unsigned int pos;
+	unsigned int ret;
 
-	ft_memcpy((void*)c->arg[0], (const void*)&map[proc->pos + 2], 4 - (2 * proc->cmnd));
-	pos = (c->arg[0] % IDX_MOD) + proc->pos;
-	// копию текущего процесса записывать в новый элемент листа?
+	ret = get_args(proc, c, type, map);
+		proc->reg[c->arg[2]] = c->arg[0] & c->arg[1];
+	check_carry(c->arg[2]);
+	return (ret);
 }

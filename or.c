@@ -14,19 +14,13 @@
 #include <op.c>
 #include <cor.h>
 
-/*
-T_REG | T_DIR | T_IND     T_REG | T_DIR | T_IND    T_REG
-
-применяем | для первых друх аргументов и записываем результат в третий
-меняем carry на 1, если результат операции был 0
-или меняем carry на 0, если результат операции был не ноль
-*/
-
 unsigned int or(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
+	unsigned int ret;
 
-	if (get_args(proc, c, type, map) == 1)
+	ret = get_args(proc, c, type, map);
 		proc->reg[c->arg[2]] = c->arg[0] | c->arg[1];
-	check_carry(c);	
+	check_carry(c->arg[2]);
+	return (ret);
 }

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lfork.c                                            :+:      :+:    :+:   */
+/*   live.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,13 +14,9 @@
 #include <op.c>
 #include <cor.h>
 
-
-unsigned int				fork(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int				live(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	t_check *c;
-	unsigned int pos;
-
-	ft_memcpy((void*)c->arg[0], (const void*)&map[proc->pos + 2], 4 - (2 * proc->cmnd));
-	pos = c->arg[0] + proc->pos;
-	// копию текущего процесса записывать в новый элемент листа?
+	proc->live = 1;
+	if (type->args[0] == proc->player_nbr)
+		g->last_live_nbr = proc->player_nbr;
 }

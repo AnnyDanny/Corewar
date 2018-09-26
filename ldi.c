@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   live.c                                             :+:      :+:    :+:   */
+/*   ldi.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,16 +14,20 @@
 #include <op.c>
 #include <cor.h>
 
-/*
-выполняет 2 операции:
-1. засчитывает, что процесс (который выполняет данную команду) жив.
-2. засчитывает, что жив номер (если этот номер совпадает с номером игрока, то засчитывает, что этот игрок жив)
-который заходит, как аргумент (T_DIR)
-*/
-
-unsigned int				live(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int ldi(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	proc->live = 1;
-	if (type->args[0] == proc->player_nbr)
-		g->last_live_nbr = proc->player_nbr;
+	unsigned int current_pos;;
+	t_check *c;
+	unsigned int temp;
+	unsigned int ret;
+
+	current_pos = proc->pos + 2;
+	ret = get_args(proc, c, type, map);
+	if (type[0] == 4)
+	{
+		ft_memcpy((void*)c->ind, (const void*)&map[(c->arg[0] % IDX_MOD) + proc->pos], 4);
+		c->arg[0] = c->ind;
+	}
+	ft_memcpy((void*)prec->reg[c->arg[2]], (const void*)&map[((c->arg[0] + c->arg[1]) % IDX_MOD) + prec->pos], 4);
+	return (ret);
 }

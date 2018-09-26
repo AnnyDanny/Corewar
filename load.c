@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   aff.c                                              :+:      :+:    :+:   */
+/*   load.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,17 +14,23 @@
 #include <op.c>
 #include <cor.h>
 
-/*
-T_REG
-значение из аргумента % 256 выводится на экран как ASCII символ
-*/
-
-unsigned int get_args(t_proc *proc, t_check *c, t_arg_type *type, unsigned char *map)
+unsigned int				load(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	c->pos = map[proc->pos + 2];
+	t_check *c;
+	unsigned char pos;
+	unsigned int ret;
 
-	ft_memcpy((void*)c->arg[0], (const void*)&map[c->pos], 1);
-	if (c->arg[0] >= 0 && c->arg[0] <= 16)
-		c->arg[0] = c->arg[0] % 256;
-	ft_printf("%u", c->arg[0]);
+	ret = get_args(proc, c, type, map);
+	{
+		if (type->args[0] == 2)
+			proc->reg[c->reg] = c->dir;
+		else if (type->args[1] == 4)
+		{
+			c->ind = c->ind % IDX_MOD;
+			pos = proc->pos + c->ind;
+			ft_memcpy((void*)proc->reg[c->reg], (const void*)&map[pos], 4);
+		}
+	}
+	check_carry(c->arg[1]);
+	return (ret);
 }

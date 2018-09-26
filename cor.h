@@ -16,16 +16,16 @@
 #include <op.h>
 #include <op.c>
 
-/*
+
 #define T_REG					1
 #define T_DIR					2
 #define T_IND					4
 #define T_LAB					8
 
-1 байт - unsigned char
-2 байта - short
-4 байта - unsigned int
-*/
+#define T_REG_SIZE					1
+#define T_DIR_SIZE					2
+#define T_IND_SIZE					4
+#define T_LAB_SIZE					8
 
 typedef struct			s_proc {
 	unsigned int		pid;

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   zjmp.c                                             :+:      :+:    :+:   */
+/*   sub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,20 +14,13 @@
 #include <op.c>
 #include <cor.h>
 
-/*
-перемещает PC с текущей позиции на T_DIR % IDX_MOD если carry равен 1
-*/
-
-
-unsigned int				zjmp(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int sub(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
 	t_check *c;
-	unsigned int pos;
+	unsigned int ret;
 
-	pos = map[proc->pos + 2];
-	if (proc->carry == 1)
-	{
-		ft_memcpy((void*)c->dir, (const void*)&map[pos], 2);
-		proc->pos = c->dir % IDX_MOD;
-	}
+	ret = get_args(proc, c, type, map);
+		proc->reg[c->arg[2]] = c->arg[0] - c->arg[1];
+	check_carry(c->arg[2]);
+	return (ret);
 }

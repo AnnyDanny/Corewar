@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cor1.c                                             :+:      :+:    :+:   */
+/*   zjmp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,28 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# define MEM_SIZE 4096
+#include <op.h>
+#include <op.c>
+#include <cor.h>
 
-unsigned char c[MEM_SIZE];
-
-typedef struct s_bin;
+unsigned int				zjmp(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-    char bot_name;
-    char bot_comment;
-    char bot_size;
-    char bot_code;
-    char bot_id;
-}              t_bin;
+	t_check *c;
+	unsigned int pos;
 
-typedef struct  s_pro
-{
-
-    // текущее положение (ПК («Счетчик программ»).)
-// carry
-// номер игрока который его породил
-// 16 регистров (массив unsigned int register[16])
-unsigned int register[16]
-// жив (1 или 0)
-// команду которую он исполняет
-// количество циклов, сколько ему осталось ждать до исполнения команды.
-}               t_pro;
+	pos = proc->pos + 2;
+	if (proc->carry == 1)
+	{
+		ft_memcpy((void*)c->dir, (const void*)&map[pos], 2);
+		proc->pos = c->dir % IDX_MOD;
+	}
+	return (2);
+}
