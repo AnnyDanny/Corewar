@@ -14,6 +14,14 @@
 #include <op.c>
 #include <cor.h>
 
+void check_carry(unsigned char arg, t_proc *proc)
+{
+	if (arg == 0)
+		proc->carry = 1;
+	else
+		proc->carry = 0;
+}
+
 int check_reg(unsigned char arg, unsigned int *ret, t_arg_type *type)
 {
 	if (c->arg >= 0 && c->arg <= 16)
