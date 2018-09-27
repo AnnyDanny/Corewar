@@ -6,88 +6,97 @@
 /*   By: gdanylov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/26 15:05:03 by gdanylov          #+#    #+#             */
-/*   Updated: 2018/09/26 15:05:04 by gdanylov         ###   ########.fr       */
+/*   Updated: 2018/09/27 16:24:29 by vmorguno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <op.h>
-#include <op.c>
-#include <cor.h>
+#include "corewar.h"
 
-unsigned int				ld(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int			ld(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	t_check *c;
-	unsigned char pos;
-	unsigned int ret;
+	t_arg		 		*args;
+	unsigned int 		pos;
+	unsigned int 		ret;
 
-	ret = get_args(proc, c, type, map);
+	args = ft_memalloc(sizeof(t_arg) * 2);
+	ret = get_args(proc, args, type, map);
 	{
-		if (type->args[0] == 2)
-			proc->reg[c->reg] = c->dir;
-		else if (type->args[1] == 4)
-		{
-			c->ind = c->ind % IDX_MOD;
-			pos = proc->pos + c->ind;
-			ft_memcpy((void*)proc->reg[c->reg], (const void*)&map[pos], 4);
-		}
+		if (type[0] == T_DIR)
+			proc->reg[args[1].obts[0]] = args[0].tbts[0];
+		else if (type[0] == T_IND)
+			proc->reg[args[1].obts[0]] = args[0].qbt;
 	}
-	check_carry(c->arg[1], proc);
+	check_carry(proc->reg[args[1].obts[0]], proc);
+	free(args);
 	return (ret);
 }
 
-unsigned int ldi(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
+unsigned int			ldi(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	unsigned int current_pos;;
-	t_check *c;
-	unsigned int temp;
-	unsigned int ret;
+	t_arg				*args;
+	int 				res;
+	unsigned int 		ret;
+	t_arg				buf;
 
-	current_pos = proc->pos + 2;
-	ret = get_args(proc, c, type, map);
-	if (type[0] == 4)
-	{
-		ft_memcpy((void*)c->ind, (const void*)&map[(c->arg[0] % IDX_MOD) + proc->pos], 4);
-		c->arg[0] = c->ind;
-	}
-	ft_memcpy((void*)prec->reg[c->arg[2]], (const void*)&map[((c->arg[0] + c->arg[1]) % IDX_MOD) + prec->pos], 4);
+	res = 0;
+	args = ft_memalloc(sizeof(t_arg) * 3);
+	ret = get_args(proc, args, type, map);
+	if (type[0] == T_DIR)
+		res += args[0].tbts[0];
+	else
+		res += args[0].qbt;
+	if (type[1] == T_DIR)
+		res += args[1].tbts[0];
+	else
+		res += args[1].qbt;
+	ft_read_mem(&buf, map, 4, (res % IDX_MOD));
+	proc->reg[args[2].obts[0]] = ft_swapuint(buf.qbt);
+	free(args);
 	return (ret);
 }
 
 unsigned int				lld(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	t_check *c;
-	unsigned int pos;
-	unsigned int ret;
+	t_arg		 		*args;
+	unsigned int 		ret;
+	t_arg				buf;
 
-	ret = get_args(prec, c, type, map);
+	args = ft_memalloc(sizeof(t_arg) * 2);
+	ret = get_args(proc, args, type, map);
 	{
-		if (type[0] == T_DIR_SIZE)
-			prec->reg[c->arg[1]] = c->arg[0];
-		if (type[0] == T_IND_SIZE)
+		if (type[0] == T_DIR)
+			proc->reg[args[1].obts[0]] = args[0].qbt;
+		else
 		{
-			pos = prec->pos + c->arg[0];
-			ft_memcpy((void*)proc->reg[c->arg[1]], (const void*)&map[pos], 4);
+			ft_read_mem(&buf, map, T_IND, proc->pos + args[0].tbts[0]); //>>> original is not correct
+			proc->reg[args[1].obts[0]] = ft_swapuint(buf.qbt);
 		}
 	}
-	check_carry(c->arg[2], proc);
+	check_carry(proc->reg[args[1].obts[0]], proc);
+	free(args);
 	return (ret);
 }
 
 unsigned int lldi(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *map)
 {
-	unsigned int current_pos;;
-	t_check *c;
-	unsigned int temp;
-	unsigned int ret;
+	t_arg				*args;
+	int 				res;
+	unsigned int 		ret;
+	t_arg				buf;
 
-	current_pos = proc->pos + 2;
-	ret = get_args(proc, c, type, map);
-	if (type[0] == 4)
-	{
-		ft_memcpy((void*)c->ind, (const void*)&map[(c->arg[0] % IDX_MOD) + proc->pos], 4);
-		c->arg[0] = c->ind;
-	}
-	ft_memcpy((void*)prec->reg[c->arg[2]], (const void*)&map[c->arg[0] + c->arg[1] + proc->pos], 4);
-	check_carry(c->arg[2], proc);
+	res = 0;
+	args = ft_memalloc(sizeof(t_arg) * 3);
+	ret = get_args(proc, args, type, map);
+	if (type[0] == T_DIR)
+		res += args[0].tbts[0];
+	else
+		res += args[0].qbt;
+	if (type[1] == T_DIR)
+		res += args[1].tbts[0];
+	else
+		res += args[1].qbt;
+	ft_read_mem(&buf, map, 4, res);
+	proc->reg[args[2].obts[0]] = ft_swapuint(buf.qbt);
+	free(args);
 	return (ret);
 }
