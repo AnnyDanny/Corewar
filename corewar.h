@@ -6,7 +6,7 @@
 /*   By: vmorguno <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/12 15:56:30 by vmorguno          #+#    #+#             */
-/*   Updated: 2018/09/27 18:17:56 by vmorguno         ###   ########.fr       */
+/*   Updated: 2018/10/10 18:54:34 by vmorguno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct			s_proc {
 	unsigned int		pos;
 	bool				carry;
 	int					player_nbr;
+	int					live_cycle;
 	unsigned char		cmnd;
 	bool				live;
 	unsigned int		reg[16];
@@ -61,11 +62,13 @@ typedef struct			s_prog {
 	int					player_nbr[MAX_PLAYERS];
 	t_champ				champs[MAX_PLAYERS];
 	int					lives[MAX_PLAYERS];
+	int					lives_tot[MAX_PLAYERS];
 	int					players;
 	int					checks_nbr;
 	short				last_live_nbr;
 	t_proc				*prcs;
 	unsigned int		lastpid;
+	unsigned int		proc_cnt;
 }						t_prog;
 
 
@@ -83,7 +86,7 @@ typedef struct			s_op {
 
 typedef	unsigned int	(*t_func)(t_proc*, t_prog*, t_arg_type*, unsigned char*);
 
-t_op    op_tab[17] =
+static t_op    op_tab[17] =
 {
 	{"live", 1, {T_DIR}, 1, 10, "alive", 0, 0},
 	{"ld", 2, {T_DIR | T_IND, T_REG}, 2, 5, "load", 1, 0},
@@ -115,22 +118,22 @@ short					ft_isfile(char *path);
 short					ft_readflag(int j, char **argv, int *i, t_prog *p);
 short					ft_binvalidator(int fd);
 short					ft_validchamp(int fd, unsigned int mgc_sz, int res);
-void					ft_binreader(int fd, t_champ *champs, short champ_num, unsigned char *mem);
+void					ft_binreader(int fd, t_champ *champs);
 unsigned char			*ft_memcreator(void);
-void					ft_loadchamp(unsigned char *mem, t_champ *champ, short champ_num);
+void					ft_loadchamp(unsigned char *mem, t_champ *champ, short champ_num, int player_qnt);
 void					ft_memdumper(unsigned char *mem);
-void					ft_print_error(short code);
-void					ft_kill_proc(t_proc **prcs, bool mode);
-t_proc					*ft_init_proc(t_prog *p, unsigned char *mem, short player_qnt);
-t_proc					*ft_new_proc(unsigned int pid, unsigned int pos, int player_nbr);
-t_proc					*ft_add_proc(t_proc *prcs, t_proc *newproc);
+void					ft_print_error(short code, t_prog **p, unsigned char **mem);
+void					ft_kill_proc(t_proc **prcs, bool mode, int ctd, t_prog *p);
+t_proc					*ft_init_proc(t_prog *p, short player_qnt);
+t_proc					*ft_new_proc(unsigned int pid, unsigned int pos, int player_nbr, bool carry);
+t_proc					*ft_add_proc(t_proc *prcs, t_proc *newproc, t_prog *p);
 t_prog					*ft_init_prog(void);
-void					ft_move_proc(t_proc *prcs, unsigned int move, unsigned char *mem);
+void					ft_move_proc(t_proc *prcs, unsigned int move, unsigned char *mem, t_prog *p);
 unsigned int			ft_call_cmnd(t_proc *prcs, t_prog *p, unsigned char *mem);
 t_arg_type				*ft_byte_decode(unsigned char code_bt, int arg_qnt);
 unsigned int			ft_validate_targs(t_arg_type *code, t_arg_type *cmnd, int arg_qnt, char label_size);
 void					ft_proc_control(t_proc *prcs, unsigned char *mem, t_prog *p);
-t_champ					ft_machine(t_prog *p, t_proc *prcs, unsigned char *mem);
+int						ft_vmachine(t_prog *p, unsigned char *mem);
 int						ft_change_cycles(t_prog *p, int cycles_to_die);
 void 					check_carry(unsigned int arg, t_proc *proc);
 unsigned int 			get_args(t_proc *proc, t_arg *arg, t_arg_type *type, unsigned char *map);
@@ -153,8 +156,11 @@ unsigned int 			sti(t_proc *proc, t_prog *g, t_arg_type *type, unsigned char *ma
 void					ft_read_mem(t_arg *arg, unsigned char *mem, unsigned int size, int start);
 unsigned int			ft_check_pos(int i);
 void					ft_write_mem(t_arg *arg, unsigned char *mem, unsigned int size, int start);
+int						ft_live_proc(t_proc *prcs);
+int						ft_get_champ_num(t_prog *p, int num);
+unsigned int			ft_calc_move(t_arg_type *type, t_proc *proc);
+t_proc					*ft_copy_proc(t_proc *sample, unsigned int pid, unsigned int pos);
 
-
-t_func funcs[16] = {&live, &ld, &st, &add, &sub, &ft_and, &ft_or, &ft_xor, &zjmp, &ldi, &sti, &ft_fork, &lld, &lldi, &lfork, &aff};
+static t_func funcs[16] = {&live, &ld, &st, &add, &sub, &ft_and, &ft_or, &ft_xor, &zjmp, &ldi, &sti, &ft_fork, &lld, &lldi, &lfork, &aff};
 
 #endif

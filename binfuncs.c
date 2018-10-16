@@ -6,7 +6,7 @@
 /*   By: vmorguno <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/07 15:38:47 by vmorguno          #+#    #+#             */
-/*   Updated: 2018/09/13 17:48:27 by vmorguno         ###   ########.fr       */
+/*   Updated: 2018/10/10 18:47:50 by vmorguno         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ short				ft_binvalidator(int fd)
 {
 	unsigned int	mgc_sz;
 	int				res;
-//	int				a;
 
 	res = read(fd, &mgc_sz, 4);
 	mgc_sz = ft_swapuint(mgc_sz);
@@ -38,7 +37,7 @@ short				ft_binvalidator(int fd)
 
 short				ft_validchamp(int fd, unsigned int mgc_sz, int res)
 {
-	union chmp_exec	chmpexec; // union for max size of executive code of champion accessed via unsigned int or unsigned char;
+	union chmp_exec	chmpexec;
 	int 			a;
 	
 	a = 0;
@@ -55,10 +54,8 @@ short				ft_validchamp(int fd, unsigned int mgc_sz, int res)
 	return (-5);   // wrong champ exec size
 }
 
-void	ft_binreader(int fd, t_champ *champs, short champ_num, unsigned char *mem)
+void	ft_binreader(int fd, t_champ *champs)
 {
-	int		a;
-
 	if (lseek(fd, 0, SEEK_CUR) != 4)
 		lseek(fd, 4, SEEK_SET);
 	read(fd, champs->name, PROG_NAME_LENGTH + 4);
@@ -66,6 +63,19 @@ void	ft_binreader(int fd, t_champ *champs, short champ_num, unsigned char *mem)
 	champs->execsize = ft_swapuint(champs->execsize);
 	read(fd, champs->comm, COMMENT_LENGTH + 4);
 	read(fd, champs->exec.obts, champs->execsize);
-	ft_loadchamp(mem, champs, champ_num);
 	close(fd);
+}
+
+int		ft_get_champ_num(t_prog *p, int num)
+{
+	int	i;
+
+	i = 0;
+	while (i < p->players)
+	{
+		if (p->player_nbr[i] == num)
+			return (i);
+		i++;
+	}
+	return (-1);
 }

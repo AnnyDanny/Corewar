@@ -1,50 +1,43 @@
-# CC = clang
-# NAME = corewar
-# FLAGS = += -g -I $(path) lib -I $(path) .
-# SRC = add_sub.c and_or_xor.c argreader.c binfuncs.c cmndfuncs.c corewar.c get_args.c ld_ldi_lld_lldi.c \
-# live_zjmp_fork_lfork_aff.c machine.c memfuncs.c procfuncs.c st_sti.c
-# OBJ = $(SRC:.c=.o)
+CC= gcc
 
-# all: $(NAME)
-	
-# $(NAME):$(OBJ)
-# 	$(MAKE) -C .lib
-# 	$(CC) $(FLAGS) $(OBJ)  -L /lib -lft -o $@
+CFLAGS=  -Wall -Wextra -Werror -I. -Ilib
 
-# $(OBJ):
-# $(CC) $(FLAGS) -c $(SRC)
-
-# clean:
-#  			rm -f *.o
-
-# fclean: clean
-#  			rm -f $(NAME)
-
-# re: fclean all
-
-
-CC = clang
-FLAGS += -g -I $(path) lib -I $(path) .
 NAME = corewar
-FILES = add_sub and_or_xor argreader binfuncs cmndfuncs corewar get_args ld_ldi_lld_lldi \
-live_zjmp_fork_lfork_aff machine memfuncs procfuncs st_sti
-SRC = $(addsuffix .c, $(FILES))
 
-OBJ = $(addsuffix .o, $(FILES))
+FILES = corewar \
+		argreader \
+	   	binfuncs \
+	   	memfuncs \
+		machine \
+		cmndfuncs \
+	   	procfuncs \
+		add_sub \
+		get_args \
+		live_zjmp_fork_lfork_aff \
+	   	and_or_xor \
+		ld_ldi_lld_lldi \
+		st_sti
+
+SRC= $(addsuffix .c, $(FILES))
+
+OBJ= $(addsuffix .o, $(FILES))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) 
 	make -C lib
-	$(CC) $(FLAGS) $(OBJ)  -L lib -lft -o $@
+	$(CC) $(CFLAGS) $(OBJ)  -L./lib -lft -o $@
 
 $(OBJ):
-	$(CC) $(FLAGS) -c $(SRC)
+	$(CC) $(CFLAGS) -c $(SRC)
 
 clean:
-			rm -f *.o
+	rm -f *.o
+	make clean -C ./lib
 
 fclean: clean
-			rm -f $(NAME)
+	rm -f $(NAME)
+	make fclean -C ./lib
 
 re: fclean all
+
